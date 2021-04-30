@@ -1,0 +1,18 @@
+<script>
+    $(document).ready(function(){
+        var age=$('#age1').val();
+        var gender=$('input[name="gender"]').val();
+        var state = $('#state1').val();
+        var precondition = $('input[name="precondition"]').val();
+        if(precondition!= "Yes"){
+            precondition ="No";
+        }
+        $('#subm').click(function(){
+            $.post("covid.php",
+            {age, gender, state, precondition  },
+            function(data){ 
+                console.log('data', data);
+            });
+        });
+    });
+</script>

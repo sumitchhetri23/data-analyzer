@@ -1,0 +1,547 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gauge Test</title>
+    <script src="gauge.min.js"></script>
+    <link rel="stylesheet" href="jQueryui/jquery-ui.css">
+    <link rel="stylesheet" href="jQueryui/jquery-ui.structure.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/style1.css">
+</style>
+</head>
+<body>
+<div class="background">
+<div id="viform" class="visible card">
+<h3><b><br />COVID-19 Vulnerability Index (US Residents)</b></h3>
+<form id="vciform" action="newmeter.html">
+<div class="form-row">
+    <div class="form-group col-sm-5">
+      <label for="gender">Select Your Gender :</label>
+    </div>
+    <div class="form-group col-sm-5">
+    <label><input type="radio" value="male" name="gender" id="gender1" required>&nbsp;Male&nbsp;&nbsp;&nbsp;&nbsp;</label>
+    <label><input type="radio" value="female" name="gender">&nbsp;Female</female>  
+</div>
+</div>
+<div class="form-row">
+    <div class="form-group col-sm-5">
+      <label for="age">Enter Your Age (years) :</label>
+      </div>
+      <div class="form-group col-sm-4">
+      <input type="number" class="form-control" id="age1" name="age" required>
+    </div>
+</div>
+ <div class="form-row">
+    <div class="form-group col-sm-5">
+      <label for="state">Enter Your State :</label>
+      </div>
+<div class="form-group col-sm-5">
+      <input type="text" id="state1" class="form-control" required><label class="stateerror" visibility="hidden"></label>
+    </div>
+      </div>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="gridCheck">
+      <label class="form-check-label" for="gridCheck">
+        &nbsp;Tick if you have been diagnosed with any chronic diseases.
+      </label>
+  </div><br />
+<button type="button" onclick="vci()" class="btn btn-deep-purple btn-rounded">Submit</button>
+</form>
+</div>
+<div id="result" class="invisible card">
+    <h3><b><br />COVID-19 Vulnerability Index(VCI) Meter</b></h3>
+    <div>
+        <canvas id="gauge-ps"></canvas>
+        <table id="indexing" class="none-border">
+            <tr>
+                <td class="none-border"><canvas id="color-label1"></canvas></td>
+                <td class="none-border">&nbsp;&nbsp;Soon</td>
+            </tr>
+            <tr>
+                <td class="none-border"><canvas id="color-label2"></canvas></td>
+                <td class="none-border">&nbsp;&nbsp;Sooner</td>
+            </tr>
+            <tr>
+                <td class="none-border"><canvas id="color-label3"></canvas></td>
+                <td class="none-border">&nbsp;&nbsp;Urgent</td>
+            </tr>
+        </table>
+    </div>
+    <h4><u><b>Your Results:</b></u></h4>
+    <div id="vciresult" class="color-change"><p id="final">&nbsp;&nbsp;We recommend you to go to the nearby vaccination center&nbsp;<label id="status1"></label>&nbsp;as you have&nbsp;<label id="vpercent"></label>% chance to be infected with the coronavirus and&nbsp;<label id="spercent"></label>% likely to die once you get infected. Stay tuned to find out more....</p></div>
+    <div class="text-center"> <button type="button" onclick="home()" class="btn btn-unique btn-rounded">Go Back</button></div>
+    </div>
+<div class="invisible card text-center" id="loading"><br />
+<h2><br /><b>Processing your result.....</b><br /><br /><br /></h2>
+<div class="text-center">
+  <div class="spinner-border" style="width: 11rem; height: 11rem;" role="status">
+  <span class="sr-only">Loading...</span>
+    </div>
+</div>
+</div>
+</div>
+<script>
+var gaugePS = new RadialGauge({
+    renderTo: 'gauge-ps',
+    width: 190,
+    height: 190,
+    units: '',
+    minValue: 0,
+    maxValue: 100,
+    majorTicks: [
+    ],
+    minorTicks: 0,
+    ticksAngle: 270,
+    startAngle: 42,
+    strokeTicks: true,
+    highlights  : [
+            {
+                from: 0,
+                to: 2.2,
+                color: "#FFFF33"
+            },
+            {
+                from: 2,
+                to: 4.2,
+                color: "#FFFC33"
+            },
+            {
+                from: 4,
+                to: 6.2,
+                color: "#FFFA33"
+            },
+            {
+                from: 6,
+                to: 8.2,
+                color: "#FFFA33"
+            },
+            {
+                from: 8,
+                to: 10.2,
+                color: "#FFF933"
+            },
+            {
+                from: 10,
+                to: 12.2,
+                color: "#FFEF33"
+            },
+            {
+                from: 12,
+                to: 14.2,
+                color: "#FFED33"
+            },
+            {
+                from: 14,
+                to: 16.2,
+                color: "#FFEB33"           
+            },
+            {
+                "from": 16,
+                "to": 18.2,
+                "color": "#FFEA33"
+            },
+            {
+                "from": 18,
+                "to": 20.2,
+                "color": "#FFE833"
+            },
+            {
+                "from": 20,
+                "to": 22.2,
+                "color": "#FFE533"
+            },
+            {
+                "from": 22,
+                "to": 24.2,
+                "color": "#FFDF33"
+            },
+            
+            {
+                "from": 24,
+                "to": 26.2,
+                "color": "#FFDE33"
+            },
+            
+            {
+                "from": 26,
+                "to": 28.2,
+                "color": "#FFDB33"
+            },
+            
+            {
+                "from": 28,
+                "to": 30.1,
+                "color": "#FFDA33"
+            },
+            {
+                "from": 30,
+                "to": 32.2,
+                "color": "#FFD933"
+            },
+            {
+                "from": 32,
+                "to": 34.2,
+                "color": "#FFD733"
+            },
+            {
+                "from": 34,
+                "to": 36.2,
+                "color": "#FF9F33"
+            },
+            {
+                "from": 36,
+                "to": 38.5,
+                "color": "#FF9B33"
+            },
+            {
+                "from": 38,
+                "to": 40.2,
+                "color": "#FF9233"
+            },
+            {
+                "from": 40,
+                "to": 42.2,
+                "color": "#FF9133"
+            },
+            {
+                "from": 42,
+                "to": 44.25,
+                "color": "#FF8F33"
+            },
+            {
+                "from": 44,
+                "to": 46.25,
+                "color": "#FF8733"
+            },
+            {
+                "from": 46,
+                "to": 48.5,
+                "color": "#FF8633"
+            },
+            {
+                "from": 48,
+                "to": 50.5,
+                "color": "#FF8533"
+            },
+            {
+                "from": 50,
+                "to": 52.2,
+                "color": "#FF8433"
+            },
+            {
+                "from": 52,
+                "to": 54.2,
+                "color": "#FF8333"
+            },            
+            {
+                "from": 54,
+                "to": 56.2,
+                "color": "#FF8213"
+            },            
+            {
+                "from": 56,
+                "to": 56.2,
+                "color": "#FF8133"
+            },            
+            {
+                "from": 56,
+                "to": 58.2,
+                "color": "#FF8033"
+            },
+            {
+                "from": 58,
+                "to": 60.2,
+                "color": "#FF7F33"
+            },
+            {
+                "from": 60,
+                "to": 62.2,
+                "color": "#FF7D33"
+            },
+            {
+                "from": 62,
+                "to": 65.2,
+                "color": "#FF7A13"
+            },
+            {
+                "from": 65,
+                "to": 66.2,
+                "color": "#FF7833"
+            },
+            {
+                "from": 66,
+                "to": 68.2,
+                "color": "#FF3F33"
+            },
+            {
+                "from": 68,
+                "to": 70.2,
+                "color": "#FF3D33"
+            },
+            {
+                "from": 70,
+                "to": 72.2,
+                "color": "#FF3C33"
+            },
+
+            {
+                "from": 72,
+                "to": 74.2,
+                "color": "#FF3B33"
+            },
+            {
+                "from": 74,
+                "to": 76.2,
+                "color": "#FF3A33"
+            },
+            {
+                "from": 76,
+                "to": 78.2,
+                "color": "#FF3833"
+            },
+            {
+                "from": 78,
+                "to": 80.2,
+                "color": "#FF3533"
+            },
+            {
+                "from": 80,
+                "to": 82.2,
+                "color": "#FF3133"
+            },
+            {
+                "from": 82,
+                "to": 84.2,
+                "color": "#FF2B33"
+            },
+            {
+                "from": 84,
+                "to": 86.2,
+                "color": "#FF2633"
+            },
+            {
+                "from": 86,
+                "to": 88.2,
+                "color": "#FF2333"
+            },
+            {
+                "from": 88,
+                "to": 90.2,
+                "color": "#FF2133"
+            },
+                        {
+                "from": 90,
+                "to": 92.2,
+                "color": "#FF1F33"
+            },
+            {
+                "from": 92,
+                "to": 94.2,
+                "color": "#FF1D33"
+            },
+            {
+                "from": 94,
+                "to": 96.2,
+                "color": "#FF1A33"
+            },
+            {
+                "from": 96,
+                "to": 98.2,
+                "color": "#FF1813"
+            },
+
+            {
+                "from": 98,
+                "to": 100,
+                "color": "#FC1700"
+            }
+    ],
+    valueInt: 1,
+    valueDec: 0,
+    colorPlate: "#fff",
+    colorMajorTicks: "#686868",
+    colorMinorTicks: "#686868",
+    colorTitle: "#000",
+    colorUnits: "#000",
+    colorNumbers: "#686868",
+    valueBox: false,
+    colorValueText: "#000",
+    colorValueBoxRect: "#FF8433",
+    colorValueBoxRectEnd: "#FF8433",
+    colorValueBoxBackground: "#FF8433",
+    colorValueBoxShadow: false,
+    colorValueTextShadow: false,
+    colorNeedleShadowUp: true,
+    colorNeedleShadowDown: true,
+    colorNeedle: "#FA7777",
+    colorNeedleEnd: "#FA7777",
+    colorNeedleCircleOuter: "rgba(200, 200, 200, 1)",
+    colorNeedleCircleOuterEnd: "rgba(200, 200, 200, 1)",
+    borderShadowWidth: 8,
+    borders: true,
+    borderInnerWidth: 0,
+    borderMiddleWidth: 0,
+    borderOuterWidth: 0,
+    colorBorderOuter: "#000000",
+    colorBorderOuterEnd: "#000000",
+    needleType: "arrow",
+    needleWidth: 3,
+    needleCircleSize: 8,
+    needleCircleOuter: true,
+    needleCircleInner: false,
+    animationDuration: 1500,
+    animationRule: "dequint",
+    fontNumbers: "Verdana",
+    fontTitle: "Verdana",
+    fontUnits: "Verdana",
+    fontValue: "Led",
+    fontValueStyle: 'italic',
+    fontNumbersSize: 0,
+    fontNumbersStyle: 'italic',
+    fontNumbersWeight: 'bold',
+    fontTitleSize: 20,
+    fontUnitsSize: 15,
+    fontValueSize: 45,
+    animatedValue: true
+});
+gaugePS.draw();
+var states=["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"];
+$('#state1').autocomplete(
+    {   
+        source: states
+    },
+    {
+        autoFocus: true,
+        delay: 150,
+        minLength: 2
+
+});
+function vci(){
+    var a =document.getElementById('age1').value;
+    var b = document.querySelector('input[name="gender"]:checked');
+    var d = document.getElementById('state1').value;
+    var e = $("input[type='radio']");
+    var f = $("input[type='number']");
+    var g = $("input[type='text']");
+    var h = d.toLowerCase();
+    var nb = Number(a);
+    var ger = Number.isInteger(nb);
+    var statecheck=["california","texas","florida","pennsylvania","georgia","alaska","arizona","michigan","washington","hawaii","massachusetts","nevada","wisconsin","ohio","colorado","north carolina","indiana","illinois","montana","new jersey","virginia","oregon","new york","minnesota","alabama","delaware","maryland","maine","louisiana","missouri","utah","kentucky","tennessee","south carolina","connecticut","wyoming","iowa","nebraska","kansas","mississippi","new mexico","arkansas","idaho","north dakota","vermont","rhode island","south dakota","new hampshire","west virginia","oklahoma"];
+    var n = statecheck.includes(h);
+    var ag= document.getElementById('age1').value;
+    if((a=="")||(b==null)||(d=="")||(ag<=0)||(!ger)){
+        if((a=="")||(ag<=0)||(ag>109)||(!ger)){
+            f.css("border","2px solid red");
+        }
+        else{
+            f.css("border-color","blue");
+        }
+        if(d==""){
+            g.css("border","2px solid red");
+        }else if(!n){
+            g.css("border","2px solid red");
+        }else{
+            g.css("border-color","blue");
+        }
+    }else if(!n){
+        g.css("border","2px solid red");        
+    }else{        
+        g.css("border-color","blue");
+        f.css("border-color","blue");
+        var name= document.getElementById('state1').value;
+        var dataString = name;
+        var name2= document.getElementById('age1').value;
+        var dataString2 = name2;
+        var name3;
+        if(document.getElementById('gridCheck').checked){
+           name3 = "Yes";
+        }else{
+           name3 = "No";
+        }
+        if(document.getElementById('gender1').checked){
+            var name4="Male";
+        }else{
+            var name4 = "Female";
+        }
+       
+        $.ajax({
+            type:"post",
+            url: "sample.php",
+            data: {dataString,dataString2,name3,name4},
+            cache: false,
+            success: function(html){
+                var abc=JSON.parse(html);
+                var status2 = abc[2];
+                var vciindex = abc[0]*10;
+                var siindex = abc[1]*10;
+                if(vciindex==100){
+                    document.getElementById('vpercent').innerHTML = 95;
+                }else {
+                    document.getElementById('vpercent').innerHTML = vciindex;
+                }
+                if(siindex==100){
+                    document.getElementById('spercent').innerHTML = 95;
+                }  
+                   else{ document.getElementById('spercent').innerHTML = siindex;
+                }
+                   document.getElementById('status1').innerHTML = status2;
+               if(status2=="soon"){
+                    $('#vciresult').removeClass('color-change').addClass('yellow');
+                      if((vciindex<50)&&(siindex<50)){
+                          gaugePS.value = 10;
+                      }else if(((vciindex<50)&&(siindex>50))||((vciindex>50)&&(siindex<50))){
+                          gaugePS.value = 20;
+                      }else {
+                          gaugePS.value = 32;
+                      }                      
+                }else if(status2=="sooner"){
+                    $('#vciresult').removeClass('color-change').addClass('orange');
+                    if((vciindex<50)&&(siindex<50)){
+                          gaugePS.value = 43;
+                      }else if(((vciindex<50)&&(siindex>50))||((vciindex>50)&&(siindex<50))){
+                          gaugePS.value = 53;
+                      }else {
+                          gaugePS.value = 62;
+                      }
+                }else {
+                    $('#vciresult').removeClass('color-change').addClass('red');
+                    if((vciindex<50)&&(siindex<50)){
+                          gaugePS.value = 72;
+                      }else if(((vciindex<50)&&(siindex>50))||((vciindex>50)&&(siindex<50))){
+                          gaugePS.value = 84;
+                      }else {
+                          gaugePS.value = 94;
+                      }
+                }
+
+            }
+        });  
+        document.getElementById("vciform").reset();
+        $('#loading').removeClass("invisible").addClass("visible");
+        $('#viform').removeClass('visible').addClass('invisible');
+        setTimeout(function() {
+         $('#loading').removeClass('visible').addClass('invisible');
+        },1000);
+        setTimeout(function() {
+              $('#result').removeClass('invisible').addClass('visible');
+        },1000);
+        }
+
+}
+function home(){
+    $('#result').removeClass('visible').addClass('invisible');
+     $('#viform').removeClass('invisible').addClass('visible');
+     $('#vciresult').removeClass('yellow').addClass('color-change');
+     $('#vciresult').removeClass('orange').addClass('color-change');
+     $('#vciresult').removeClass('red').addClass('color-change');
+    }
+
+</script>
+
+</body>
+</html>

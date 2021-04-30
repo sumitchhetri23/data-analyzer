@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="favicon.ico">
+</head>
+<body>
+<form id="viform" action="" method="POST">
+<input type="text" name="username">
+<input type="submit" onclick="vci()"><br />
+</form>
+<h1 id="label1"></h1>
+<?php
+function php_def(){
+    $php_abc= $_POST["username"];
+    echo $php_abc;
+}
+?>
+<script>
+function vci(){
+    var abc = "<?php php_def(); ?>";
+    alert(abc);
+}
+</script>
+</body>
+</html>

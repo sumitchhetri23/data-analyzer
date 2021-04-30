@@ -1,0 +1,18 @@
+$total_cases = $datas[0]['cases']+$datas[1]['cases']+$datas[2]['cases']+$datas[3]['cases']+$datas[4]['cases']+$datas[5]['cases']+$datas[6]['cases'];    
+        $age_group0 = $datas[0]['cases'];
+    $age_group1 = $datas[1]['cases'];
+    $age_group2 = $datas[2]['cases'];
+    $age_group3 = $datas[3]['cases'];
+    $age_group4 = $datas[4]['cases'];
+    $age_group5 = $datas[5]['cases'];
+    $age_group6 = $datas[6]['cases'];
+    $p0 = $age_group0/$total_cases;
+    $p1 = $age_group1/$total_cases;
+    $p2 = $age_group2/$total_cases;
+    $p3 = $age_group3/$total_cases;
+    $p4 = $age_group4/$total_cases;
+    $p5 = $age_group5/$total_cases;
+    $p6 = $age_group6/$total_cases;
+$result = array($vi_index, $si_index, $status);
+echo json_encode($result); 
+                var abc=JSON.parse(html);
